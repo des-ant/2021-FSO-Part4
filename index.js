@@ -1,52 +1,6 @@
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
-const mongoose = require('mongoose');
-const logger = require('./utils/logger');
+const app = require('./app');
 const config = require('./utils/config');
-
-const app = express();
-
-// Create new token to log data in HTTP POST request
-morgan.token('body', (request) => JSON.stringify(request.body));
-
-// Use Morgan middleware to log messages to console
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
-
-// Use Cors middleware to allow requests from all origins
-app.use(cors());
-
-// Use Express middleware to parse incoming requests with JSON payloads
-app.use(express.json());
-
-const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number,
-});
-
-const Blog = mongoose.model('Blog', blogSchema);
-
-mongoose.connect(config.MONGODB_URI);
-
-app.get('/api/blogs', (request, response) => {
-  Blog
-    .find({})
-    .then((blogs) => {
-      response.json(blogs);
-    });
-});
-
-app.post('/api/blogs', (request, response) => {
-  const blog = new Blog(request.body);
-
-  blog
-    .save()
-    .then((result) => {
-      response.status(201).json(result);
-    });
-});
+const logger = require('./utils/logger');
 
 app.listen(config.PORT, () => {
   logger.info(`Server running on port ${config.PORT}`);
