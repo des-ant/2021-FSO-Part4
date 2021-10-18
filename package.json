@@ -1,0 +1,32 @@
+{
+  "name": "blog-list",
+  "version": "0.0.1",
+  "description": "Blog list application that allows users to save information about interesting blogs they have stumbled across on the internet. ",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/des-ant/2021-FSO-Part4.git"
+  },
+  "author": "des-ant",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/des-ant/2021-FSO-Part4/issues"
+  },
+  "homepage": "https://github.com/des-ant/2021-FSO-Part4#readme",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.25.2",
+    "nodemon": "^2.0.13"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.11"
+  }
+}
