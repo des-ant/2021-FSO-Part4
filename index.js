@@ -1,9 +1,22 @@
-const http = require('http');
+require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
 
 const app = express();
-const cors = require('cors');
-const mongoose = require('mongoose');
+
+// Create new token to log data in HTTP POST request
+morgan.token('body', (request) => JSON.stringify(request.body));
+
+// Use Morgan middleware to log messages to console
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
+
+// Use Cors middleware to allow requests from all origins
+app.use(cors());
+
+// Use Express middleware to parse incoming requests with JSON payloads
+app.use(express.json());
 
 const blogSchema = new mongoose.Schema({
   title: String,
@@ -14,11 +27,8 @@ const blogSchema = new mongoose.Schema({
 
 const Blog = mongoose.model('Blog', blogSchema);
 
-const mongoUrl = 'mongodb://localhost/bloglist';
+const mongoUrl = process.env.MONGODB_URI;
 mongoose.connect(mongoUrl);
-
-app.use(cors());
-app.use(express.json());
 
 app.get('/api/blogs', (request, response) => {
   Blog

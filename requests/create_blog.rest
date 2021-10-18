@@ -1,0 +1,12 @@
+GET http://localhost:3003/api/blogs
+
+###
+POST http://localhost:3003/api/blogs/ HTTP/1.1
+content-type: application/json
+
+{
+    "title": "New Blog 18 Oct",
+    "author": "John Smith",
+    "url": "random.blog/post/1",
+    "likes": 0
+}
