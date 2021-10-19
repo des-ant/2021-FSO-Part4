@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 /* eslint-disable no-unused-vars, arrow-body-style */
 const dummy = (blogs) => {
   // Receives array of blog posts as parameter
@@ -47,6 +49,17 @@ const mostBlogs = (blogs) => {
   // Receives array of blogs as parameter
   // Returns author who has largest amount of blogs
   // Return value also contains mumber of blogs the top author has
+  if (_.isEmpty(blogs)) {
+    return {};
+  }
+  // Count number of blogs by each author
+  const authorBlogs = _.countBy(blogs, 'author');
+  // Create new object of with keys for author and number of blogs
+  const authorBlogCount = _.map(authorBlogs, (val, key) => {
+    return { author: key, blogs: val };
+  });
+  const authorMostBlogs = _.maxBy(authorBlogCount, 'blogs');
+  return authorMostBlogs;
 };
 /* eslint-enable no-unused-vars, arrow-body-style */
 
