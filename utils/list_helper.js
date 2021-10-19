@@ -65,6 +65,22 @@ const mostBlogs = (blogs) => {
 const mostLikes = (blogs) => {
   // Returns author whose blog posts have the largest amount of likes
   // and total number of likes that the author has received
+  if (_.isEmpty(blogs)) {
+    return {};
+  }
+  // Sum number of likes for each author and aggregate by author
+  const reducer = (result, blog) => {
+    if (result[blog.author]) {
+      result[blog.author] += blog.likes;
+    } else {
+      result[blog.author] = blog.likes;
+    }
+    return result;
+  };
+  const authorLikes = blogs.reduce(reducer, {});
+  const topAuthor = _.maxBy(_.keys(authorLikes), (author) => authorLikes[author]);
+  const topAuthorLikes = { author: topAuthor, likes: authorLikes[topAuthor] };
+  return topAuthorLikes;
 };
 /* eslint-enable no-unused-vars, arrow-body-style */
 
