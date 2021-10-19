@@ -61,6 +61,11 @@ const mostBlogs = (blogs) => {
   const authorMostBlogs = _.maxBy(authorBlogCount, 'blogs');
   return authorMostBlogs;
 };
+
+const mostLikes = (blogs) => {
+  // Returns author whose blog posts have the largest amount of likes
+  // and total number of likes that the author has received
+};
 /* eslint-enable no-unused-vars, arrow-body-style */
 
 module.exports = {
@@ -68,4 +73,5 @@ module.exports = {
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
