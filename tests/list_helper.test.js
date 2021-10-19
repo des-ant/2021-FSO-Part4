@@ -77,7 +77,7 @@ describe('total likes', () => {
     expect(result).toBe(5);
   });
 
-  test('of empty is zero', () => {
+  test('of empty list is zero', () => {
     const result = listHelper.totalLikes(emptyList);
     expect(result).toBe(0);
   });
@@ -153,7 +153,34 @@ describe('favorite blog', () => {
     },
   ];
 
-  test('when list has only one blog, is that', () => {
+  const blogsManyFavorites = [
+    {
+      _id: '5a422a851b54a676234d17f7',
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 7,
+      __v: 0,
+    },
+    {
+      _id: '5a422aa71b54a676234d17f8',
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+      likes: 13,
+      __v: 0,
+    },
+    {
+      _id: '5a422b3a1b54a676234d17f9',
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+      likes: 13,
+      __v: 0,
+    },
+  ];
+
+  test('when list has only one blog, is that blog', () => {
     const result = listHelper.favoriteBlog(listWithOneBlog);
     const expected = {
       title: 'Go To Statement Considered Harmful',
@@ -163,7 +190,7 @@ describe('favorite blog', () => {
     expect(result).toEqual(expected);
   });
 
-  test('of empty is zero', () => {
+  test('of empty list is empty object', () => {
     const result = listHelper.favoriteBlog(emptyList);
     const expected = {};
     expect(result).toEqual(expected);
@@ -177,5 +204,14 @@ describe('favorite blog', () => {
       likes: 12,
     };
     expect(result).toEqual(expected);
+  });
+
+  test('of a list with many favorites is any favorite', () => {
+    const result = listHelper.favoriteBlog(blogsManyFavorites);
+    const expected = {
+      author: 'Edsger W. Dijkstra',
+      likes: 13,
+    };
+    expect(result).toMatchObject(expected);
   });
 });

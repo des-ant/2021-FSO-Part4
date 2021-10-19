@@ -18,7 +18,29 @@ const totalLikes = (blogs) => {
 const favoriteBlog = (blogs) => {
   // Receive list of blogs as a parameter
   // Return blog with most likes
-  return 0;
+  const reducer = (blogWithMostLikes, blog) => {
+    return blog.likes > blogWithMostLikes.likes ? blog : blogWithMostLikes;
+  };
+
+  const emptyBlog = {
+    title: '',
+    author: '',
+    likes: -1,
+  };
+
+  const blogWithMostLikes = blogs.reduce(reducer, emptyBlog);
+
+  if (blogWithMostLikes.likes === -1) {
+    return {};
+  }
+
+  const result = {
+    title: blogWithMostLikes.title,
+    author: blogWithMostLikes.author,
+    likes: blogWithMostLikes.likes,
+  };
+
+  return result;
 };
 /* eslint-enable no-unused-vars, arrow-body-style */
 
