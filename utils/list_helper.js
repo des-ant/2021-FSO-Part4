@@ -4,9 +4,7 @@ const dummy = (blogs) => {
   // Return value 1
   return 1;
 };
-/* eslint-enable no-unused-vars, arrow-body-style */
 
-/* eslint-disable arrow-body-style */
 const totalLikes = (blogs) => {
   // Receive list of blog posts as a parameter
   // Return total sum of likes in all of the blog posts
@@ -16,9 +14,16 @@ const totalLikes = (blogs) => {
 
   return blogs.reduce(reducer, 0);
 };
-/* eslint-enable arrow-body-style */
+
+const favoriteBlog = (blogs) => {
+  // Receive list of blogs as a parameter
+  // Return blog with most likes
+  return 0;
+};
+/* eslint-enable no-unused-vars, arrow-body-style */
 
 module.exports = {
   dummy,
   totalLikes,
+  favoriteBlog,
 };
