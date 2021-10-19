@@ -42,10 +42,17 @@ const favoriteBlog = (blogs) => {
 
   return result;
 };
+
+const mostBlogs = (blogs) => {
+  // Receives array of blogs as parameter
+  // Returns author who has largest amount of blogs
+  // Return value also contains mumber of blogs the top author has
+};
 /* eslint-enable no-unused-vars, arrow-body-style */
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
+  mostBlogs,
 };
