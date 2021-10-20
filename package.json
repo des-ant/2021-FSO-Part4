@@ -4,9 +4,9 @@
   "description": "Blog list application that allows users to save information about interesting blogs they have stumbled across on the internet. ",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "jest --verbose",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "lint": "eslint ."
   },
   "repository": {
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/des-ant/2021-FSO-Part4#readme",
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.25.2",
