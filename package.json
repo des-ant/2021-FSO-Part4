@@ -25,7 +25,8 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.25.2",
     "jest": "^27.3.0",
-    "nodemon": "^2.0.13"
+    "nodemon": "^2.0.13",
+    "supertest": "^6.1.6"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -34,8 +35,5 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.0.11",
     "morgan": "^1.10.0"
-  },
-  "jest": {
-    "testEnvironment": "node"
   }
 }
