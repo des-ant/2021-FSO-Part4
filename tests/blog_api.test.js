@@ -9,11 +9,12 @@ const api = supertest(app);
 beforeEach(async () => {
   await Blog.deleteMany({});
 
-  let blogObject = new Blog(helper.initialBlogs[0]);
-  await blogObject.save();
-
-  blogObject = new Blog(helper.initialBlogs[1]);
-  await blogObject.save();
+  /* eslint-disable no-restricted-syntax, prefer-const, no-await-in-loop */
+  for (let blog of helper.initialBlogs) {
+    let blogObject = new Blog(blog);
+    await blogObject.save();
+  }
+  /* eslint-enable */
 });
 
 test('blogs are returned as json', async () => {

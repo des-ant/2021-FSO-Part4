@@ -24,7 +24,7 @@ const errorHandler = (error, request, response, next) => {
 
   next(error);
 };
-/* eslint-enable consistent-return */
+/* eslint-enable */
 
 module.exports = {
   requestLogger,
