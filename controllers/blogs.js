@@ -3,7 +3,7 @@ const Blog = require('../models/blog');
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({});
-  response.json(blogs);
+  response.json(blogs.map((blog) => blog.toJSON()));
 });
 
 blogsRouter.post('/', async (request, response) => {
@@ -13,11 +13,20 @@ blogsRouter.post('/', async (request, response) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes || 0,
+    likes: body.likes === undefined ? 0 : body.likes,
   });
 
   const savedBlog = await blog.save();
   response.json(savedBlog);
+});
+
+blogsRouter.get('/:id', async (request, response) => {
+  const blog = await Blog.findById(request.params.id);
+  if (blog) {
+    response.json(blog.toJSON());
+  } else {
+    response.status(404).end();
+  }
 });
 
 module.exports = blogsRouter;
