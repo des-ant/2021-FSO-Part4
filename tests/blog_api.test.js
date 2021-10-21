@@ -32,9 +32,6 @@ beforeEach(async () => {
   await blogObject.save();
 });
 
-// Makes an HTTP GET request to the /api/blogs url.
-// Verify that the blog list application returns
-// the correct amount of blog posts in the JSON format.
 test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
@@ -51,10 +48,19 @@ test('all blogs are returned', async () => {
 test('a specific blog is within the returned blogs', async () => {
   const response = await api.get('/api/blogs');
 
-  const title = response.body.map((r) => r.title);
-  expect(title).toContain(
+  const titles = response.body.map((r) => r.title);
+  expect(titles).toContain(
     'Go To Statement Considered Harmful',
   );
+});
+
+test('verify unique identifier property of blog is named id', async () => {
+  const response = await api.get('/api/blogs');
+
+  const ids = response.body.map((r) => r.id);
+  ids.forEach((id) => {
+    expect(id).toBeDefined();
+  });
 });
 
 afterAll(() => {
