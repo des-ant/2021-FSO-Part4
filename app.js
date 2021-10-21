@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const express = require('express');
+require('express-async-errors');
 const cors = require('cors');
 const morgan = require('morgan');
+const middleware = require('./utils/middleware');
 const config = require('./utils/config');
 const blogsRouter = require('./controllers/blogs');
 const logger = require('./utils/logger');
@@ -28,5 +30,9 @@ mongoose.connect(config.MONGODB_URI)
   .catch((error) => {
     logger.error('error connecting to MongoDB:', error.message);
   });
+
+app.use(middleware.requestLogger);
+app.use(middleware.unknownEndpoint);
+app.use(middleware.errorHandler);
 
 module.exports = app;

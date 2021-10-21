@@ -104,7 +104,7 @@ test('blog without title and url is not added', async () => {
   await api
     .post('/api/blogs')
     .send(newBlogMissingTitleAndUrl)
-    .expect(500);
+    .expect(400);
 
   const blogsAtEnd = await helper.blogsInDb();
 
