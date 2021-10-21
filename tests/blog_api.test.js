@@ -45,7 +45,7 @@ describe('when there is initially some blogs saved', () => {
 });
 
 describe('viewing a specific blog', () => {
-  test('succeeds wtih a valid id', async () => {
+  test('succeeds with a valid id', async () => {
     const blogsAtStart = await helper.blogsInDb();
 
     const blogToView = blogsAtStart[0];
@@ -155,6 +155,30 @@ describe('deletion of a blog', () => {
     const titles = blogsAtEnd.map((r) => r.title);
 
     expect(titles).not.toContain(blogToDelete.title);
+  });
+});
+
+describe('updating a specific blog', () => {
+  test('succeeds with a valid id', async () => {
+    const blogsAtStart = await helper.blogsInDb();
+
+    const blogToUpdate = blogsAtStart[0];
+
+    const updatedBlog = {
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+      likes: 12,
+      id: blogToUpdate.id,
+    };
+
+    const resultBlog = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    expect(resultBlog.body).toEqual(updatedBlog);
   });
 });
 
