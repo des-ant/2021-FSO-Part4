@@ -71,6 +71,31 @@ test('a valid blog can be added', async () => {
   );
 });
 
+test('if likes property is missing, it will default to 0', async () => {
+  // Clear database
+  await Blog.deleteMany({});
+
+  const newBlogMissingLikes = {
+    title: 'Canonical string reduction',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlogMissingLikes)
+    .expect(200)
+    .expect('Content-Type', /application\/json/);
+
+  const blogsAtEnd = await helper.blogsInDb();
+
+  const newlyAddedBlog = blogsAtEnd[0];
+  console.log(newlyAddedBlog);
+  const { likes } = newlyAddedBlog;
+  // Likes should default to 0 if likes property missing from the request
+  expect(likes).toBe(0);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
