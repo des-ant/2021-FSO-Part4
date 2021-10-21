@@ -71,11 +71,11 @@ test('a valid blog can be added', async () => {
   );
 });
 
-test('if likes property is missing, it will default to 0', async () => {
+test('blog added without likes should default to 0 likes', async () => {
   // Clear database
   await Blog.deleteMany({});
 
-  const newBlogMissingLikes = {
+  const blogWithoutLikes = {
     title: 'Canonical string reduction',
     author: 'Edsger W. Dijkstra',
     url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
@@ -83,17 +83,32 @@ test('if likes property is missing, it will default to 0', async () => {
 
   await api
     .post('/api/blogs')
-    .send(newBlogMissingLikes)
+    .send(blogWithoutLikes)
     .expect(200)
     .expect('Content-Type', /application\/json/);
 
   const blogsAtEnd = await helper.blogsInDb();
 
   const newlyAddedBlog = blogsAtEnd[0];
-  console.log(newlyAddedBlog);
   const { likes } = newlyAddedBlog;
   // Likes should default to 0 if likes property missing from the request
   expect(likes).toBe(0);
+});
+
+test('blog without title and url is not added', async () => {
+  const newBlogMissingTitleAndUrl = {
+    author: 'Edsger W. Dijkstra',
+    likes: 4,
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlogMissingTitleAndUrl)
+    .expect(500);
+
+  const blogsAtEnd = await helper.blogsInDb();
+
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
 });
 
 afterAll(() => {
