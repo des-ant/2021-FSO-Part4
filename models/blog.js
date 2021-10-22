@@ -18,6 +18,10 @@ const blogSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 
 // Format the id objects returned by Mongoose to strings

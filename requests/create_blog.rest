@@ -5,8 +5,8 @@ POST http://localhost:3003/api/blogs/ HTTP/1.1
 content-type: application/json
 
 {
-    "title": "New Blog 18 Oct",
+    "title": "New Blog 22 Oct",
     "author": "John Smith",
-    "url": "random.blog/post/1",
+    "url": "random.blog/post/2",
     "likes": 0
 }
