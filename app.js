@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const middleware = require('./utils/middleware');
 const config = require('./utils/config');
 const blogsRouter = require('./controllers/blogs');
+const usersRouter = require('./controllers/users');
 const logger = require('./utils/logger');
 
 const app = express();
@@ -22,6 +23,7 @@ morgan.token('body', (request) => JSON.stringify(request.body));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 app.use('/api/blogs', blogsRouter);
+app.use('/api/users', usersRouter);
 
 mongoose.connect(config.MONGODB_URI)
   .then(() => {
