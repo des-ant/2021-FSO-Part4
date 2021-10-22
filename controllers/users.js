@@ -7,8 +7,13 @@ usersRouter.get('/', async (request, response) => {
   response.json(users.map((user) => user.toJSON()));
 });
 
+// eslint-disable-next-line consistent-return
 usersRouter.post('/', async (request, response) => {
   const { body } = request;
+
+  if (body.password.length < 3) {
+    return response.status(400).json({ error: '`password` must be at least 3 characters' });
+  }
 
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(body.password, saltRounds);
