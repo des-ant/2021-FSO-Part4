@@ -7,6 +7,7 @@ const middleware = require('./utils/middleware');
 const config = require('./utils/config');
 const blogsRouter = require('./controllers/blogs');
 const usersRouter = require('./controllers/users');
+const loginRouter = require('./controllers/login');
 const logger = require('./utils/logger');
 
 const app = express();
@@ -24,6 +25,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 
 app.use('/api/blogs', blogsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/login', loginRouter);
 
 mongoose.connect(config.MONGODB_URI)
   .then(() => {
