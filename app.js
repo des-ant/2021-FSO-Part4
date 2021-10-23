@@ -22,6 +22,8 @@ app.use(express.json());
 morgan.token('body', (request) => JSON.stringify(request.body));
 // Use Morgan middleware to log messages to console
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
+// Allow routes to access json web token with request.token
+app.use(middleware.tokenExtractor);
 
 app.use('/api/blogs', blogsRouter);
 app.use('/api/users', usersRouter);

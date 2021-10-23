@@ -14,13 +14,13 @@ Content-Type: application/json
 # Create Note
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYxNzI0Y2M4YTgxYTRmY2UwNWY1OGEzZiIsImlhdCI6MTYzNDkwNTExNCwiZXhwIjoxNjM0OTA4NzE0fQ.SVhlkC59HdUJvTFXkiBlYLZ3_gqm5T3DSpymCPf6ePE
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYxNzI0Y2M4YTgxYTRmY2UwNWY1OGEzZiIsImlhdCI6MTYzNDk5MDkyNiwiZXhwIjoxNjM0OTk0NTI2fQ.ssRwkNOZggEWCOXRTKhTqXilBJ2pP0svVjjjZtYzG6o
 
 {
-    "title": "Note created with token",
+    "title": "Note created with token middleware",
     "author": "John Smith",
     "url": "https://fullstackopen.com/en/part4/token_authentication",
-    "likes": 3
+    "likes": 2
 }
 
 ###

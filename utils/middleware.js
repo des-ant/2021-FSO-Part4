@@ -34,8 +34,22 @@ const errorHandler = (error, request, response, next) => {
 };
 /* eslint-enable */
 
+const tokenExtractor = (request, response, next) => {
+  // Isolate the token from Authorization header and
+  // place it to the token field of the request object
+  const authorization = request.get('authorization');
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    request.token = authorization.substring(7);
+  } else {
+    request.token = null;
+  }
+
+  next();
+};
+
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
+  tokenExtractor,
 };
