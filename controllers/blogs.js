@@ -1,7 +1,6 @@
-const jwt = require('jsonwebtoken');
 const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
-const User = require('../models/user');
+const { userExtractor } = require('../utils/middleware');
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -13,16 +12,13 @@ blogsRouter.get('/', async (request, response) => {
 });
 
 // eslint-disable-next-line consistent-return
-blogsRouter.post('/', async (request, response) => {
-  const { body } = request;
-  // Check validity of token
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+blogsRouter.post('/', userExtractor, async (request, response) => {
+  const { body, token, user } = request;
   // If there is no token or object decoded from token does not contain
   // user's identity, return error status code
-  if (!request.token || !decodedToken.id) {
+  if (!token || !user) {
     return response.status(401).json({ error: 'token missing or invalid' });
   }
-  const user = await User.findById(decodedToken.id);
 
   const blog = new Blog({
     title: body.title,
@@ -63,21 +59,18 @@ blogsRouter.put('/:id', async (request, response) => {
 });
 
 // eslint-disable-next-line consistent-return
-blogsRouter.delete('/:id', async (request, response) => {
-  // Blog can be deleted only by user who added the blog
-  // Check validity of token
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
+  const { token, user } = request;
   // If there is no token or object decoded from token does not contain
   // user's identity, return error status code
-  if (!request.token || !decodedToken.id) {
+  if (!token || !user) {
     return response.status(401).json({ error: 'token missing or invalid' });
   }
 
-  const userId = decodedToken.id;
   const blog = await Blog.findById(request.params.id);
   // If deleting a blog is attempted without a token or by a wrong user,
   // The operation should return a suitable status code
-  if (blog.user.toString() !== userId.toString()) {
+  if (blog.user.toString() !== user._id.toString()) {
     return response.status(401).json({ error: 'token missing or invalid' });
   }
 
