@@ -9,3 +9,13 @@ content-type: application/json
     "name": "Superuser",
     "password": "salainen"
 }
+
+###
+POST http://localhost:3003/api/users/
+content-type: application/json
+
+{
+    "username": "abc",
+    "name": "Ab C",
+    "password": "abc"
+}

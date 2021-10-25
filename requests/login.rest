@@ -11,16 +11,26 @@ Content-Type: application/json
 }
 
 ###
-# Create Note
-POST http://localhost:3003/api/blogs/
+# Login
+POST http://localhost:3003/api/login/
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYxNzI0Y2M4YTgxYTRmY2UwNWY1OGEzZiIsImlhdCI6MTYzNDk5MDkyNiwiZXhwIjoxNjM0OTk0NTI2fQ.ssRwkNOZggEWCOXRTKhTqXilBJ2pP0svVjjjZtYzG6o
 
 {
-    "title": "Note created with token middleware",
+    "username": "abc",
+    "password": "abc"
+}
+
+###
+# Create Blog
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYxNzI0Y2M4YTgxYTRmY2UwNWY1OGEzZiIsImlhdCI6MTYzNTEzOTA2NSwiZXhwIjoxNjM1MTQyNjY1fQ.7b03dfdAu0MHKgB_jiOetI3UbjnnM51xCkU8jrusfFI
+
+{
+    "title": "Note created with token middleware 2",
     "author": "John Smith",
     "url": "https://fullstackopen.com/en/part4/token_authentication",
-    "likes": 2
+    "likes": 3
 }
 
 ###
@@ -33,3 +43,18 @@ Content-Type: application/json
     "name": "Superuser",
     "password": "salainen"
 }
+
+###
+GET http://localhost:3003/api/blogs
+
+###
+# Delete blog
+DELETE http://localhost:3003/api/blogs/6176423bc3bebf0ab6f2bfd4
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYxNzI0Y2M4YTgxYTRmY2UwNWY1OGEzZiIsImlhdCI6MTYzNTEzOTA2NSwiZXhwIjoxNjM1MTQyNjY1fQ.7b03dfdAu0MHKgB_jiOetI3UbjnnM51xCkU8jrusfFI
+
+###
+# Unauthorised deletion
+DELETE http://localhost:3003/api/blogs/6176423bc3bebf0ab6f2bfd4
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiYyIsImlkIjoiNjE3NjQyOGNjM2JlYmYwYWI2ZjJiZmQ5IiwiaWF0IjoxNjM1MTQwMzAyLCJleHAiOjE2MzUxNDM5MDJ9.m7HaOKJwAR1gzYAOo6H5kDeEkajxNXVOwuGzblXIAzs

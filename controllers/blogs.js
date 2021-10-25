@@ -15,7 +15,6 @@ blogsRouter.get('/', async (request, response) => {
 // eslint-disable-next-line consistent-return
 blogsRouter.post('/', async (request, response) => {
   const { body } = request;
-  // const token = getTokenFrom(request);
   // Check validity of token
   const decodedToken = jwt.verify(request.token, process.env.SECRET);
   // If there is no token or object decoded from token does not contain
@@ -63,8 +62,26 @@ blogsRouter.put('/:id', async (request, response) => {
   response.json(updatedBlog.toJSON());
 });
 
+// eslint-disable-next-line consistent-return
 blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id);
+  // Blog can be deleted only by user who added the blog
+  // Check validity of token
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  // If there is no token or object decoded from token does not contain
+  // user's identity, return error status code
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' });
+  }
+
+  const userId = decodedToken.id;
+  const blog = await Blog.findById(request.params.id);
+  // If deleting a blog is attempted without a token or by a wrong user,
+  // The operation should return a suitable status code
+  if (blog.user.toString() !== userId.toString()) {
+    return response.status(401).json({ error: 'token missing or invalid' });
+  }
+
+  await Blog.deleteOne(blog);
   response.status(204).end();
 });
 
