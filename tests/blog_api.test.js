@@ -74,7 +74,31 @@ describe('viewing a specific blog', () => {
 });
 
 describe('the addition of a new blog', () => {
-  test('succeeds with valid data', async () => {
+  let token;
+
+  beforeEach(async () => {
+    await User.deleteMany({});
+
+    const passwordHash = await bcrypt.hash('sekret', 10);
+    const user = new User({ username: 'root', passwordHash });
+
+    await user.save();
+
+    const loginRequest = {
+      username: 'root',
+      password: 'sekret',
+    };
+
+    const loginResponse = await api
+      .post('/api/login')
+      .send(loginRequest)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    token = loginResponse.body.token;
+  });
+
+  test('succeeds with valid data and a valid token', async () => {
     const newBlog = {
       title: 'Canonical string reduction',
       author: 'Edsger W. Dijkstra',
@@ -84,6 +108,8 @@ describe('the addition of a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/);
@@ -110,6 +136,8 @@ describe('the addition of a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `bearer ${token}`)
       .send(blogWithoutLikes)
       .expect(200)
       .expect('Content-Type', /application\/json/);
@@ -130,8 +158,29 @@ describe('the addition of a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlogMissingTitleAndUrl)
       .expect(400);
+
+    const blogsAtEnd = await helper.blogsInDb();
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
+  });
+
+  test('fails with status code 401 Unauthorized if a token is not provided', async () => {
+    const newBlog = {
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+      likes: 12,
+    };
+
+    await api
+      .post('/api/blogs')
+      .set('Content-Type', 'application/json')
+      .send(newBlog)
+      .expect(401);
 
     const blogsAtEnd = await helper.blogsInDb();
 
@@ -140,23 +189,84 @@ describe('the addition of a new blog', () => {
 });
 
 describe('deletion of a blog', () => {
-  test('succeeds with status code 204 if id is valid', async () => {
-    const blogsAtStart = await helper.blogsInDb();
-    const blogToDelete = blogsAtStart[0];
+  let token;
+  let blogResponse;
+  let newlyAddedBlog;
+
+  beforeEach(async () => {
+    await User.deleteMany({});
+
+    const passwordHash = await bcrypt.hash('sekret', 10);
+    const user = new User({ username: 'root', passwordHash });
+
+    await user.save();
+
+    const loginRequest = {
+      username: 'root',
+      password: 'sekret',
+    };
+
+    const loginResponse = await api
+      .post('/api/login')
+      .send(loginRequest)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    token = loginResponse.body.token;
+
+    const newBlog = {
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+      likes: 12,
+    };
+
+    blogResponse = await api
+      .post('/api/blogs')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `bearer ${token}`)
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    newlyAddedBlog = blogResponse.body;
+  });
+
+  test('succeeds with status code 204 if id is valid and token is valid', async () => {
+    const blogToDelete = newlyAddedBlog;
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `bearer ${token}`)
       .expect(204);
 
     const blogsAtEnd = await helper.blogsInDb();
 
     expect(blogsAtEnd).toHaveLength(
-      helper.initialBlogs.length - 1,
+      helper.initialBlogs.length,
     );
 
     const titles = blogsAtEnd.map((r) => r.title);
 
     expect(titles).not.toContain(blogToDelete.title);
+  });
+
+  test('fails with status code 401 Unauthorized if a token is not provided', async () => {
+    const blogToDelete = newlyAddedBlog;
+
+    await api
+      .delete(`/api/blogs/${blogToDelete}`)
+      .expect(401);
+
+    const blogsAtEnd = await helper.blogsInDb();
+
+    expect(blogsAtEnd).toHaveLength(
+      helper.initialBlogs.length + 1,
+    );
+
+    const titles = blogsAtEnd.map((r) => r.title);
+
+    expect(titles).toContain(blogToDelete.title);
   });
 });
 
